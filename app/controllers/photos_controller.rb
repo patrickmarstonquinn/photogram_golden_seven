@@ -20,14 +20,38 @@ class PhotosController < ApplicationController
     render("/create_photo.html.erb")
   end
 
-def destroy
+  def destroy
 
-  @id = params[:id]
-  p = Photo.find(@id)
-  p.destroy
+    @id = params[:id]
+    p = Photo.find(@id)
+    p.destroy
 
     redirect_to("http://localhost:3000/photos")
-end
+  end
+
+  def edit_form
+
+    @id = params[:id]
+    @photos = Photo.find(@id).source
+    @caption = Photo.find(@id).caption
+
+    render("photos/edit.html.erb")
+  end
+
+  def update_row
+
+    p = Photo.find_by({:id => params[:id]})
+
+    # why does ^^ work when @id method doesn't?
+
+    p.source = params[:the_source]
+    p.caption = params[:the_caption]
+    p.save
+
+    redirect_to("/photos/#{p.id}")
+
+    # same question
+  end
 
   def show
 
